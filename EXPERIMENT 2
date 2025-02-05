@@ -1,0 +1,137 @@
+class Video { 
+private String title; 
+private boolean checkedOut; 
+private double averageRating; 
+private int ratingCount; 
+private int ratingSum; 
+// Constructor 
+public Video(String title) { 
+this.title = title; 
+this.checkedOut = false; 
+this.averageRating = 0.0; 
+this.ratingCount = 0; 
+this.ratingSum = 0; 
+} 
+// Check out the video 
+public void checkOut() { 
+if (!checkedOut) { 
+checkedOut = true; 
+System.out.println("Video '" + title + "' has been checked out."); 
+} else { 
+System.out.println("Video '" + title + "' is already checked out."); 
+} 
+}
+ // Return the video 
+    public void returnVideo() { 
+        if (checkedOut) { 
+            checkedOut = false; 
+            System.out.println("Video '" + title + "' has been returned."); 
+        } else { 
+            System.out.println("Video '" + title + "' was not checked out."); 
+        } 
+    } 
+  
+    // Receive a rating for the video 
+    public void receiveRating(int rating) { 
+        if (rating >= 1 && rating <= 5) { 
+            ratingCount++; 
+            ratingSum += rating; 
+            averageRating = (double) ratingSum / ratingCount; 
+            System.out.println("Rating of " + rating + " received for video '" + title + "'."); 
+        } else { 
+            System.out.println("Invalid rating. Please provide a rating between 1 and 5."); 
+        } 
+    } 
+  
+    // Get the title 
+    public String getTitle() { 
+        return title; 
+    } 
+  
+    // ToString method for inventory display 
+    @Override 
+    public String toString() { 
+        return "Title: " + title + ", Checked Out: " + checkedOut + ", Average Rating: " + 
+String.format("%.2f", averageRating); 
+    } 
+} 
+  
+class VideoStore { 
+    private Video[] inventory; 
+    private int count; 
+  // Constructor with preloaded videos 
+    public VideoStore() { 
+        inventory = new Video[]{ 
+            new Video("The Matrix"), 
+            new Video("Godfather II"), 
+            new Video("Star Wars Episode IV: A New Hope") 
+        }; 
+        count = inventory.length; 
+    } 
+  
+    // Check out a video by title 
+    public void checkOut(String title) { 
+        Video video = findVideo(title); 
+        if (video != null) { 
+            video.checkOut(); 
+        } else { 
+            System.out.println("Video '" + title + "' not found in inventory."); 
+        } 
+    } 
+  
+    // Return a video by title 
+    public void returnVideo(String title) { 
+        Video video = findVideo(title); 
+        if (video != null) { 
+            video.returnVideo(); 
+        } else { 
+            System.out.println("Video '" + title + "' not found in inventory."); 
+        } 
+    } 
+  
+    // Receive a rating for a video 
+    public void receiveRating(String title, int rating) { 
+        Video video = findVideo(title); 
+        if (video != null) { 
+            video.receiveRating(rating); 
+        } else { 
+            System.out.println("Video '" + title + "' not found in inventory."); 
+        } 
+    }
+  // List the inventory 
+    public void listInventory() { 
+        System.out.println("\nVideo Inventory:"); 
+        for (Video video : inventory) { 
+            System.out.println(video); 
+        } 
+    } 
+  
+    // Find a video by title 
+    private Video findVideo(String title) { 
+        for (Video video : inventory) { 
+            if (video.getTitle().equalsIgnoreCase(title)) { 
+                return video; 
+            } 
+        } 
+        return null; 
+    } 
+} 
+  
+public class VideoStoreLauncher { 
+    public static void main(String[] args) { 
+        VideoStore store = new VideoStore(); 
+  
+        // Give ratings to videos 
+        store.receiveRating("The Matrix", 5); 
+        store.receiveRating("Godfather II", 4); 
+        store.receiveRating("Star Wars Episode IV: A New Hope", 3); 
+  
+        // Rent and return videos 
+        store.checkOut("The Matrix"); 
+        store.returnVideo("The Matrix"); 
+        store.checkOut("Godfather II"); 
+  
+        // List the inventory 
+        store.listInventory(); 
+    } 
+} 
